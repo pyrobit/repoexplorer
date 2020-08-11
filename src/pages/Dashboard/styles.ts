@@ -63,7 +63,7 @@ transition: transform 0.2s;
             margin-top: 16px;
         }
         &:hover{
-         transform: translateX(10px);   
+         transform: translateX(20px);   
         }
 
         img {
@@ -74,7 +74,8 @@ transition: transform 0.2s;
         }
 
         div {
-            margin-left: 16px;
+            margin-left: 0 16px;
+            flex: 1;
 
             strong {
                 font-size: 20px;
