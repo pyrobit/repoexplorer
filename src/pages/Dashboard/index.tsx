@@ -1,4 +1,4 @@
-import React, { useState, FormEvent } from 'react';
+import React, { useState, FormEvent, useEffect } from 'react';
 import api from '../../services/api';
 import { Title, Form, Repositories, Error } from './styles';
 import { FiChevronRight } from 'react-icons/fi';
@@ -20,11 +20,23 @@ const Dashboard: React.FC = () => {
     const [newRepo, setNewRepo] = useState('');
 
     const [inputError, setInputError] = useState('');
-    const [repositories, setRepositories ] = useState<Repository[]>([]);
+    const [repositories, setRepositories ] = useState<Repository[]>(() => {
+        const storagedRepositories = localStorage.getItem('@GitExplorer:repositories');
+        if(storagedRepositories){
+            return JSON.parse(storagedRepositories);
+        } else {
+            return [];
+        }
+    });
 
+    useEffect( () => {
+        localStorage.setItem('@GitExplorer:repositories', JSON.stringify(repositories));
+    }, [repositories]);
+
+    
     async function handleAddRepository(event: FormEvent<HTMLFormElement>):Promise<void> {
         event.preventDefault(); // needs to be at the beginning
-
+        setInputError('');
         if(!newRepo) {
             setInputError('Type author/repo names');
             return;
@@ -37,6 +49,7 @@ const repository = response.data;
         } catch(err){
             setInputError('Erro na busca por este repositório.');
             setNewRepo('');
+            setInputError('');
         }
     }
 
